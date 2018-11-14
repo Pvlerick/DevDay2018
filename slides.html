@@ -1,0 +1,358 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+
+	<link rel="stylesheet" href="reveal.js/css/reveal.css">
+	<link rel="stylesheet" href="reveal.js/css/theme/night.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-markdown>
+				<textarea data-template>
+					## Retour d’expérience sur une migration sauce DevOps
+					##### Maxime Degallaix & Philippe Vlérick
+					![Ingenico ePayments](img\ingenico.png)
+				</textarea data-template>
+			</section>
+			<section data-markdown>
+				<textarea data-template>
+					### Contenu
+					- Historique
+					- Premier pilote
+					- Voyons plus grand!
+					- Problèmes
+					- Conclusions
+				</textarea data-template>
+			</section>
+			<section>
+				<section data-markdown>
+					<textarea data-template>
+						## Historique
+					</textarea data-template>
+				</section>				
+				<section data-markdown>
+					<textarea data-template>
+						### Plateforme
+						- Front-end "ASP Classic"
+						- Monolithique
+						- Déploiement sensible
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Migration
+						#### Tentative de "Big Bang" en .NET
+						- Réecriture d'une grosse partie de la plateforme
+						- Progressivement abandonné
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Micro services & DevOps
+						- Division de la plateforme en services
+						- Déploiements plus petits
+						- Migration progressive
+					</textarea data-template>
+				</section>
+			</section>
+			<section>
+				<section data-markdown>
+					<textarea data-template>
+						## Premier pilote
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## GDPR
+						- Petit projet, peu risqué
+						- Appelé sur les pages de payments
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Objectif principal
+						#### <div style="color: orange">Réduire les risques d'impact sur la plateforme existante</div>
+						- Rien faire planter
+						- Ne pas ajouter de latence
+						Note:
+						TODO: Timeouts, circuit-breakers, retry... 
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Objectifs secondaires
+						- Valider la technologie
+						- Evaluer les temps de réponse
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Techniques
+					</textarea data-template>
+				</section>				
+				<section data-markdown>
+					<textarea data-template>
+						### Déploiements
+						- Automatisation maximum
+							- Commit dans "master" -> déploiement en DEV
+							- Un click pour chaque environement suivant
+						- ASP testé pour l'absence ou la défaillance du nouveau module
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### "Sidecar" vs COM+
+						- Pont entre ASP et micro services
+						  - Localisation des instance
+						  - Sécurité
+						- COM+: in process et éprouvé mais techniquement enuyant
+						- Sidecar: out of process, plus flexible mais nouveau
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### "Dark Launch", ou presque...
+						#### (tester en production)
+						- Performances applicatives
+						- Charge serveurs
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Monitoring
+						- Dashboard (Splunk)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Insert SPLUNK Screenshot here
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Enseignements
+						- TODO
+					</textarea data-template>
+				</section>
+			</section>
+			<section>
+				<section data-markdown>
+					<textarea data-template>
+						## Voyons plus grand!
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Détection de la fraude
+						- Idée lors d'un brainstorming (TODO: hacktime)
+						- Réutilisation des résultats de l'effort de migration précédent
+						TODO: dessin de la migration en couche?
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Objectif principal
+						#### <div style="color: orange">Réduire les risques d'impact sur la plateforme existante</div>
+						- Rien faire planter
+						- Ne pas ajouter de latence
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Objectifs secondaires
+						- Valider la viabilité du projet 
+						TODO: plan d'attaque + dessins + strangler pattern	
+						- Evaluer les temps de réponse
+						- Valider le nouveau module
+						- Mise en confiance
+						Note:
+						Rappel que la technologie a déjà été validée
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Mise en confiance
+						- Modification de l'ASP en premier (TODO: oraganisation + vente du projet + fail fast?)
+						- "Feature Toggle/Kill Switch"
+						- Inclusion de Opérations en amont
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Techniques
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### "A/B Testing"
+						#### (exécution parallèle)
+						- Comparaisons des résultats
+						- % des transactions, augmentation progressive
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Migration progressive
+						- % des transactions, augmentation progressive
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Monitoring
+						- "9 to 5"
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Appel vers un système externe
+						- COM+
+						- Décorateur (TODO: beau dessin)
+					</textarea data-template>
+				</section>
+			</section>
+			<section>
+				<section data-markdown>
+					<textarea data-template>
+						## Problèmes
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Latence différente selon le niveau de logging
+						- 500ms en plus sur certaines requêtes quand le niveau de log minimum est "Info"
+						Note:
+						Apparition fréquentes de requêtes lentes dans Splunk
+						On remarque que le niveau de log fait disparaître le bug
+						- Niveau de log modifiable avec un appel rest sur endpoint admin
+						- Historique backend
+						Hyptothèse async et stream
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Hypothèse
+						```csharp
+						public static void main(string[] args)
+						{
+							//Don't do sync over async!
+						}
+						```
+						- Difficile à vérifier, impossible à reproduire systèmatiquement
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Validation du correctif
+						- "Canary Release"
+						Note:
+						Déploiement du fix sur un seul serveur, monitoring, deux serveurs...
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Lenteur d'un service annexe
+						- Service de statistique appelé pour chaque transaction
+						Note:
+						TODO: dessin ASP/DB/Stats/ESF, tout les stats doivent être vues par tous les systèmes
+						Utilisation de la même table que le code ASP
+						Percentile 98 de ce service très élevé
+						TODO: décorateur pour logger les requêtes SQL lentes (> 100ms)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Investigation
+						- Décorateur pour logger les requêtes SQL lentes (> 100ms)
+						- Vérification des indexes dans la DB
+						- Annecdote: `SELECT 1` > 3800ms à certains moments!
+						Note: découverte d'une latence qui affecte aussi l'ASP mais qui n'est pas visible
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### En cours...
+						- Modification des indexes
+						  - Déclicat car partagé entre ASP et nouveau service
+						- Investigation plus large sur la lenteur de la DB
+						Note:
+						Perception générale que la DB est très rapide, et pourtant...
+					</textarea data-template>
+				</section>
+			</section>
+			<section>
+				<section data-markdown>
+					<textarea data-template>
+						## Conclusions
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Priorité
+						- Se donner les moyens d'essayer
+						- Pas de demi-mesure
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### En marge du reste de l'organisation
+						- Flexibilité
+						- Processus moins cadenassé
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Misc TODO
+						- Pas de vente des microservices: découplement des déploiements (et donc des processus) est suffisant!
+						- Motivation, par l'exemple, qu'il est possible d'améliorer la situation!
+					</textarea data-template>
+				</section>
+			</section>
+			<section>
+				<section data-markdown>
+					<textarea data-template>
+						## Merci
+						https://github.com/Pvlerick/DevDay2018
+					</textarea data-template>
+				</section>
+			</section>
+		</div>
+	</div>
+
+	<script src="reveal.js/lib/js/head.min.js"></script>
+	<script src="reveal.js/js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'reveal.js/plugin/markdown/marked.js' },
+				{ src: 'reveal.js/plugin/markdown/markdown.js' },
+				{ src: 'reveal.js/plugin/notes/notes.js', async: true },
+				{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } }
+			]
+		});
+	</script>
+</body>
+
+</html>
