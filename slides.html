@@ -35,7 +35,7 @@
 			</section>
 			<section data-markdown>
 				<textarea data-template>
-					### Contenu
+					## Contenu
 					- Historique
 					- Premier pilote
 					- Voyons plus grand!
@@ -52,7 +52,7 @@
 				<section data-markdown>
 					<textarea data-template>
 						### Plateforme
-						- Front-end "ASP Classic"
+						- Front-end « ASP Classic » 
 						- Monolithique
 						- Déploiement sensible
 					</textarea data-template>
@@ -60,7 +60,7 @@
 				<section data-markdown>
 					<textarea data-template>
 						### Migration
-						#### Tentative de "Big Bang" en .NET
+						#### Tentative de « Big Bang » en .NET
 						- Réecriture d'une grosse partie de la plateforme
 						- Progressivement abandonné
 					</textarea data-template>
@@ -68,9 +68,8 @@
 				<section data-markdown>
 					<textarea data-template>
 						### Micro services & DevOps
-						- Division de la plateforme en services
+						- Division de la plateforme en services & migration progressive
 						- Déploiements plus petits
-						- Migration progressive
 					</textarea data-template>
 				</section>
 			</section>
@@ -113,14 +112,17 @@
 					<textarea data-template>
 						### Déploiements
 						- Automatisation maximum
-							- Commit dans "master" -> déploiement en DEV
+							- Commit dans « master » -> déploiement en DEV
 							- Un click pour chaque environement suivant
+							- Déploiement à deux vitesses
 						- ASP testé pour l'absence ou la défaillance du nouveau module
+						Note:
+						Deux vitesses: déploiement de l'ASP lent et .NET rapide
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-						### "Sidecar" vs COM+
+						### « Sidecar » vs COM+
 						- Pont entre ASP et micro services
 						  - Localisation des instance
 						  - Sécurité
@@ -130,7 +132,7 @@
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-						### "Dark Launch", ou presque...
+						### « Dark Launch », ou presque...
 						#### (tester en production)
 						- Performances applicatives
 						- Charge serveurs
@@ -163,9 +165,8 @@
 				<section data-markdown>
 					<textarea data-template>
 						## Détection de la fraude
-						- Idée lors d'un brainstorming (TODO: hacktime)
+						- Idée lors d'un brainstorming - « Hack Time »
 						- Réutilisation des résultats de l'effort de migration précédent
-						TODO: dessin de la migration en couche?
 					</textarea data-template>
 				</section>
 				<section data-markdown>
@@ -179,8 +180,7 @@
 				<section data-markdown>
 					<textarea data-template>
 						### Objectifs secondaires
-						- Valider la viabilité du projet 
-						TODO: plan d'attaque + dessins + strangler pattern	
+						- Valider la viabilité du projet
 						- Evaluer les temps de réponse
 						- Valider le nouveau module
 						- Mise en confiance
@@ -190,10 +190,46 @@
 				</section>
 				<section data-markdown>
 					<textarea data-template>
+						### Plan d'attaque
+						#### « Strangler Pattern »
+						![Strangler Pattern](img\strangler_pattern.png)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Point de départ
+						![Strangler Pattern](img\migration_start.png)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Création de la « Façade »
+						![Strangler Pattern](img\migration_refactoring.png)
+						Note:
+						L'ASP étant très "permissif", cette étape à demander beaucoup d'analyse (variables globales...)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Appel du nouveau module
+						![Strangler Pattern](img\migration_parallel.png)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Phase finale
+						![Strangler Pattern](img\migration_end.png)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
 						#### Mise en confiance
-						- Modification de l'ASP en premier (TODO: oraganisation + vente du projet + fail fast?)
-						- "Feature Toggle/Kill Switch"
+						- Modification de l'ASP en premier
+						  - « Fail Fast »
+						- « Feature Toggle / Kill Switch »
 						- Inclusion de Opérations en amont
+						Note:
+						Fail Fast est aussi un point de vente pour le projet: les difficultés sont poussés au début du projet afin qu'un échec ne soit pas coûteux
 					</textarea data-template>
 				</section>
 				<section data-markdown>
@@ -203,7 +239,7 @@
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-						### "A/B Testing"
+						### « A/B Testing »
 						#### (exécution parallèle)
 						- Comparaisons des résultats
 						- % des transactions, augmentation progressive
@@ -218,14 +254,19 @@
 				<section data-markdown>
 					<textarea data-template>
 						### Monitoring
-						- "9 to 5"
+						- « 9 to 5 »
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
 						### Appel vers un système externe
-						- COM+
-						- Décorateur (TODO: beau dessin)
+						- via un COM+
+						- Comment éviter de faire deux appels?
+						  - Décorateur (TODO: beau dessin)
+						  	- Iterface identique
+						Note:
+						L'appel du système externe via le COM+ a été conservé afin de limiter la migration au strict minimum
+						Flag en .NET pour identifier les appels passants par l'ASP
 					</textarea data-template>
 				</section>
 			</section>
@@ -262,7 +303,7 @@
 				<section data-markdown>
 					<textarea data-template>
 						#### Validation du correctif
-						- "Canary Release"
+						- « Canary Release »
 						Note:
 						Déploiement du fix sur un seul serveur, monitoring, deux serveurs...
 					</textarea data-template>
@@ -323,6 +364,7 @@
 						### Misc TODO
 						- Pas de vente des microservices: découplement des déploiements (et donc des processus) est suffisant!
 						- Motivation, par l'exemple, qu'il est possible d'améliorer la situation!
+						- Hack Time: impact positif!
 					</textarea data-template>
 				</section>
 			</section>
