@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-	<title>reveal.js</title>
+	<title>Retour d’expérience sur une migration sauce DevOps</title>
 
 	<link rel="stylesheet" href="reveal.js/css/reveal.css">
 	<link rel="stylesheet" href="reveal.js/css/theme/night.css">
@@ -18,7 +18,8 @@
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.type = 'text/css';
-		link.href = window.location.search.match(/print-pdf/gi) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'reveal.js/css/print/pdf.css' :
+			'reveal.js/css/print/paper.css';
 		document.getElementsByTagName('head')[0].appendChild(link);
 	</script>
 </head>
@@ -28,8 +29,10 @@
 		<div class="slides">
 			<section data-markdown>
 				<textarea data-template>
-					## Retour d’expérience sur une migration sauce DevOps
-					##### Maxime Degallaix & Philippe Vlérick
+					### Retour d’expérience sur une migration sauce DevOps
+
+					_Maxime Degallaix & Philippe Vlérick_
+
 					![Ingenico ePayments](img\ingenico.png)
 				</textarea data-template>
 			</section>
@@ -77,29 +80,27 @@
 				<section data-markdown>
 					<textarea data-template>
 						## Premier pilote
+						- Petit projet, peu risqué
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
 						## GDPR
-						- Petit projet, peu risqué
-						- Appelé sur les pages de payments
+						- Appelé sur les pages de paiements
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-						### Objectif principal
-						#### <div style="color: orange">Réduire les risques d'impact sur la plateforme existante</div>
-						- Rien faire planter
+						### Objectifs principaux
+						<div style="color: orange">Réduire les risques d'impact sur la plateforme existante</div>
+						- Ne rien faire planter
 						- Ne pas ajouter de latence
-						Note:
-						TODO: Timeouts, circuit-breakers, retry... 
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
 						### Objectifs secondaires
-						- Valider la technologie
+						- Valider la pile technologique
 						- Evaluer les temps de réponse
 					</textarea data-template>
 				</section>
@@ -107,7 +108,13 @@
 					<textarea data-template>
 						## Techniques
 					</textarea data-template>
-				</section>				
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Timeout et Circuit-breaker
+						![circuit-breaker](img/circuitbreaker.png)
+					</textarea data-template>
+				</section>
 				<section data-markdown>
 					<textarea data-template>
 						### Déploiements
@@ -115,25 +122,28 @@
 							- Commit dans « master » -> déploiement en DEV
 							- Un click pour chaque environement suivant
 							- Déploiement à deux vitesses
-						- ASP testé pour l'absence ou la défaillance du nouveau module
-						Note:
-						Deux vitesses: déploiement de l'ASP lent et .NET rapide
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-						### « Sidecar » vs COM+
-						- Pont entre ASP et micro services
-						  - Localisation des instance
+						### COM+ vs « Sidecar »
+						- Communication entre ASP et micro services
+						  - Localisation des instances
 						  - Sécurité
-						- COM+: in process et éprouvé mais techniquement enuyant
-						- Sidecar: out of process, plus flexible mais nouveau
+						- COM+
+							- éprouvé
+							- mais techniquement enuyant
+						- Sidecar
+							- plus flexible
+							- mais nouveau
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-						### « Dark Launch », ou presque...
-						#### (tester en production)
+						### « Dark Launch », _ou presque..._
+						<span class="fragment fade-in" style="color:cornflowerblue;">
+							testons en production :)
+						</span>
 						- Performances applicatives
 						- Charge serveurs
 					</textarea data-template>
@@ -141,18 +151,20 @@
 				<section data-markdown>
 					<textarea data-template>
 						### Monitoring
-						- Dashboard (Splunk)
+						- Logs
+						- Métriques (en cours)
+						- Dashboard Splunk
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-						Insert SPLUNK Screenshot here
+						![Splunk Dashboard](img\dashboard-splunk.png)
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
 						## Enseignements
-						- TODO
+						ça fonctionne!! Tous les objectifs sont atteints
 					</textarea data-template>
 				</section>
 			</section>
@@ -286,22 +298,27 @@
 						- Niveau de log modifiable avec un appel rest sur endpoint admin
 						- Historique backend
 						Hyptothèse async et stream
+						EnableRewind() lit une première fois le request stream en Trace
 					</textarea data-template>
 				</section>
 				<section data-markdown>
 					<textarea data-template>
 						#### Hypothèse
-						```csharp
-						public static void main(string[] args)
-						{
-							//Don't do sync over async!
-						}
-						```
 						- Difficile à vérifier, impossible à reproduire systèmatiquement
-					</textarea data-template>
-				</section>
-				<section data-markdown>
-					<textarea data-template>
+
+						<pre>
+							<code data-trim data-noescape>
+								using (var reader = StreamReaderHelper
+									.CreateLeaveOpenStreamReader(request.Body))
+								{
+									<span class="fragment fade-out">var body = reader.ReadToEnd();</span>
+									<span class="fragment fade-in">var body = await reader.ReadToEndAsync().ConfigureAwait(false);</span>
+							</code>
+						</pre>
+					</textarea>
+			</section>
+			<section data-markdown>
+				<textarea data-template>
 						#### Validation du correctif
 						- « Canary Release »
 						Note:
