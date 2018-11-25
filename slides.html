@@ -64,7 +64,7 @@
 					<textarea data-template>
 						### Migration
 						#### Tentative de « Big Bang » en .NET
-						- Réecriture d'une grosse partie de la plateforme
+						- Réécriture d'une grosse partie de la plateforme
 						- Progressivement abandonné
 					</textarea data-template>
 				</section>
@@ -120,7 +120,7 @@
 						### Déploiements
 						- Automatisation maximum
 							- Commit dans « master » -> déploiement en DEV
-							- Un click pour chaque environement suivant
+							- Un click pour chaque environnement suivant
 							- Déploiement à deux vitesses
 					</textarea data-template>
 				</section>
@@ -273,11 +273,23 @@
 					<textarea data-template>
 						### Appel vers un système externe
 						- via un COM+
-						- Comment éviter de faire deux appels?
-						  - Décorateur (TODO: beau dessin)
-						  	- Iterface identique
+						- ASP et .NET (migration minimum)
+						![Appel COM+](img\appel_com.png)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Comment éviter de faire deux appels?
+						![Appel COM+](img\appel_com_parallel.png)
+					</textarea data-template>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						#### Deuxième COM+ - Décorateur
+						![Appel COM+](img\appel_com_parallel_deco.png)
+						- Interface identique pour ne pas modifier l'ASP
+						- Sauve le résultat de l'appel fait par l'ASP et le renvoie au .NET
 						Note:
-						L'appel du système externe via le COM+ a été conservé afin de limiter la migration au strict minimum
 						Flag en .NET pour identifier les appels passants par l'ASP
 					</textarea data-template>
 				</section>
@@ -295,7 +307,7 @@
 						Note:
 						Apparition fréquentes de requêtes lentes dans Splunk
 						On remarque que le niveau de log fait disparaître le bug
-						- Niveau de log modifiable avec un appel rest sur endpoint admin
+						- Niveau de log modifiable avec un appel REST sur l'endpoint admin
 						- Historique backend
 						Hyptothèse async et stream
 						EnableRewind() lit une première fois le request stream en Trace
@@ -341,7 +353,7 @@
 						#### Investigation
 						- Décorateur pour logger les requêtes SQL lentes (> 100ms)
 						- Vérification des indexes dans la DB
-						- Annecdote: `SELECT 1` > 3800ms à certains moments!
+						- Anecdote: `SELECT 1` > 3800ms à certains moments!
 						Note: découverte d'une latence qui affecte aussi l'ASP mais qui n'est pas visible
 					</textarea data-template>
 				</section>
@@ -349,7 +361,7 @@
 					<textarea data-template>
 						#### En cours...
 						- Modification des indexes
-						  - Déclicat car partagé entre ASP et nouveau service
+						  - Délicat car partagé entre ASP et nouveau service
 						- Investigation plus large sur la lenteur de la DB
 						Note:
 						Perception générale que la DB est très rapide, et pourtant...
@@ -388,7 +400,7 @@
 			<section>
 				<section data-markdown>
 					<textarea data-template>
-						## Merci
+						## Merci de votre attention
 						https://github.com/Pvlerick/DevDay2018
 					</textarea data-template>
 				</section>
