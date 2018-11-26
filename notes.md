@@ -79,7 +79,7 @@ Un projet de ce type dévie forcément des techniques habituelles de l'organisat
 ### Micro services
 
 Les micro services sont très à la mode ces jours-ci, mais le but de cette présentation n'est pas de les vendre comme une solution miracle.
-Par leur taille réduite (cadre limité donnant lieu théoriquement à peu de code) et leur découplage physique (ils sont déployés comme des processus séparés), ils permettent palier aux problèmes organisationnels classiques issus des plateforme monolithiques. Ils ajoutent cependant des problèmes techniques auxquels qu'il faut se préparer à confronter: beaucoup plus de déploiements, latence due aux appels hors processus, problèmes réseaux...
+Par leur taille réduite (cadre limité donnant lieu théoriquement à peu de code) et leur découplage physique (ils sont déployés comme des processus séparés), ils permettent palier aux problèmes organisationnels classiques issus des plateforme monolithiques. Ils ajoutent cependant des problèmes techniques auxquels il faut se préparer: beaucoup plus de déploiements, latence due aux appels hors processus, problèmes réseaux...
 
 ### « Hack Time » & Innovation
 
