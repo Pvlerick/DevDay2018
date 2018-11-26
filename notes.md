@@ -36,7 +36,30 @@ Ce nouvel effort a donné lieu à l'adoption des certaines techniques DevOps dan
 
 ## Voyons plus grand!
 
-...
+### Détection de la fraude
+
+Lors d'un brainstorming dans le cadre du "Hack Time", initiative selon laquelle tous les dévelopeurs peuvent utiliser 10% de leur temps à leur guise, un dévelopeur émit l'idée d'appeler le nouveau module de fraude depuis la plateforme ASP.
+En effet, le module de détection de la fraud avait été en grande partie migré lors de la migration "Big Bang", et ce nouveau module pouvais facilement être transformé en service indépendant appelable comme le service GDPR l'était.
+
+### Objectif principal
+
+Ne rien faire planter et minimiser la latence ajoutée par l'appel du nouveau service.
+
+### Objectifs secondaires
+
+- Valider la viabilité du projet au plus tôt: certifier que l'ASP peut être modifié pour appeler le nouveau module et tenir compte ses ses résultats
+- Evaluer que le temps de réponse du nouveau module est accteptable - dans des conditions réeles
+- Valider que le nouveau module produit des résultats identiques à l'ancien module
+- Se mettre en confiance progressivement que cette migration est possible, détecter au plus tôt si cette migration ne l'est pas
+
+### Plan d'attaque
+
+Le "Strangler Pattern" est devenu un classique pour les migrations (https://docs.microsoft.com/en-us/azure/architecture/patterns/strangler). Il a pour objectif d'aider à la transition d'un ancien système vers un nouveau.
+L'idée est de construire une façade devant l'ancien système, de rediriger tous le code appelant vers cette façade pour pouvoir ensuire modifier le système qui a été ainsi isolé.
+
+Le code de la plateforme ASP ne permettant pas l'introduction d'une façade tel qu'il était, la première étapte fut de faire du nettoyage afin de rassembler le code "détection de la fraude" au même endroit.
+Une fois le code bien "rassemblé", il peut être modifié pour faire un appel au nouveau service externe.
+Quand la validation que le nouveau module remplit bien tous les objectifs (résultats, performances...), le code ASP pourra être modifer pour y supprimer le code de la détection de la fraude qui sera dorénavant un appel au nouveau service.
 
 ## Problèmes
 
@@ -66,4 +89,4 @@ En permettant au développeurs d'essayer, un projet de migration très sérieux 
 ### Découverte de problèmes sur la plateforme existante
 
 En plus d'être un projet qui a maintenant beaucoup de chances d'aboutir, le processus a permis de mettre le doigt sur des latences anormales dans la plateforme existante. La plateforme existante ne produisant pas assez d'éléments pour les révéler, ou le monitoring n'en était pas capable.
-Un fois de plus, il ne s'agit pas ici de critiquer le système en place, mais simplement de souligner 
+Cette migration a donc eu une valeur ajoutée imédiate pour la plateforme existante: nousy avons détecté des insuffisance et des problèmes qui peuvent être résolus.
